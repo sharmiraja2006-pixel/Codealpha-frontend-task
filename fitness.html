@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness Tracker App</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .container { background: white; border-radius: 16px; padding: 25px; width: 100%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    h1 { color: #333; text-align: center; margin-bottom: 20px; font-size: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+    button { padding: 12px; border: none; border-radius: 8px; background: #11998e; color: white; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: #0e8278; }
+    .workout-list { list-style: none; max-height: 200px; overflow-y: auto; }
+    .workout-item { background: #f8f9fa; border-left: 4px solid #11998e; padding: 12px; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+    .summary { background: #e6fffa; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; font-weight: bold; color: #234e52; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏃‍♂️ Fitness Tracker</h1>
+    <div class="form-group">
+      <input type="text" id="activity" placeholder="Activity (e.g., Running, Cycling)">
+      <input type="number" id="duration" placeholder="Duration (in minutes)">
+      <input type="number" id="calories" placeholder="Calories Burned">
+      <button onclick="addWorkout()">Log Workout</button>
+    </div>
+    
+    <h3>Workout History</h3>
+    <ul class="workout-list" id="workoutList"></ul>
+
+    <div class="summary" id="summary">
+      Total Workouts: 0 | Total Calories: 0 kcal
+    </div>
+  </div>
+
+  <script>
+    let totalCalories = 0;
+    let workoutCount = 0;
+
+    function addWorkout() {
+      const activity = document.getElementById('activity').value;
+      const duration = document.getElementById('duration').value;
+      const calories = parseInt(document.getElementById('calories').value);
+
+      if(!activity || !duration || isNaN(calories)) {
+        alert('Please fill all fields!');
+        return;
+      }
+
+      const list = document.getElementById('workoutList');
+      const li = document.createElement('li');
+      li.className = 'workout-item';
+      li.innerHTML = `<span><strong>${activity}</strong> (${duration} mins)</span> <span>🔥 ${calories} kcal</span>`;
+      list.appendChild(li);
+
+      totalCalories += calories;
+      workoutCount++;
+
+      document.getElementById('summary').innerText = `Total Workouts: ${workoutCount} | Total Calories: ${totalCalories} kcal`;
+
+      document.getElementById('activity').value = '';
+      document.getElementById('duration').value = '';
+      document.getElementById('calories').value = '';
+    }
+  </script>
+</body>
+</html>
