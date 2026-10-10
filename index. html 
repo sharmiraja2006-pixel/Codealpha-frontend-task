@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcard Quiz App</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .container { background: white; border-radius: 16px; padding: 25px; width: 100%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    h1 { color: #333; text-align: center; margin-bottom: 20px; font-size: 24px; }
+    .card { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; min-height: 180px; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; font-size: 18px; color: #2d3748; margin-bottom: 20px; cursor: pointer; transition: transform 0.3s; }
+    .card:hover { transform: translateY(-3px); }
+    .controls { display: flex; gap: 10px; margin-bottom: 20px; }
+    button { flex: 1; padding: 12px; border: none; border-radius: 8px; background: #667eea; color: white; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: #5a67d8; }
+    .form-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+    input { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    .btn-add { background: #48bb78; }
+    .btn-add:hover { background: #38a169; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📇 Flashcard Quiz</h1>
+    <div class="card" id="card" onclick="flipCard()">Click Next to start!</div>
+    <div class="controls">
+      <button onclick="prevCard()">Previous</button>
+      <button onclick="flipCard()">Flip</button>
+      <button onclick="nextCard()">Next</button>
+    </div>
+    <div class="form-group">
+      <h3>Add New Flashcard</h3>
+      <input type="text" id="question" placeholder="Enter Question">
+      <input type="text" id="answer" placeholder="Enter Answer">
+      <button class="btn-add" onclick="addCard()">Add Card</button>
+    </div>
+  </div>
+
+  <script>
+    let cards = [
+      { q: "What is HTML?", a: "HyperText Markup Language" },
+      { q: "What is CSS?", a: "Cascading Style Sheets" },
+      { q: "What is JavaScript?", a: "A scripting language for web pages" }
+    ];
+    let currentIndex = 0;
+    let showingAnswer = false;
+
+    function updateCard() {
+      const card = document.getElementById('card');
+      if(cards.length === 0) {
+        card.innerText = "No cards available. Add one below!";
+        return;
+      }
+      card.innerText = showingAnswer ? cards[currentIndex].a : cards[currentIndex].q;
+    }
+
+    function flipCard() {
+      if(cards.length === 0) return;
+      showingAnswer = !showingAnswer;
+      updateCard();
+    }
+
+    function nextCard() {
+      if(cards.length === 0) return;
+      currentIndex = (currentIndex + 1) % cards.length;
+      showingAnswer = false;
+      updateCard();
+    }
+
+    function prevCard() {
+      if(cards.length === 0) return;
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+      showingAnswer = false;
+      updateCard();
+    }
+
+    function addCard() {
+      const q = document.getElementById('question').value;
+      const a = document.getElementById('answer').value;
+      if(q && a) {
+        cards.push({ q, a });
+        document.getElementById('question').value = '';
+        document.getElementById('answer').value = '';
+        alert('Flashcard Added!');
+        if(cards.length === 1) updateCard();
+      }
+    }
+    updateCard();
+  </script>
+</body>
+</html>
